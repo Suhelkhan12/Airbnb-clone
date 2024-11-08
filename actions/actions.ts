@@ -5,6 +5,14 @@ import { currentUser } from "@clerk/nextjs/server";
 import db from "@/utils/db";
 import { profileSchema } from "@/utils/schema";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+
+const renderError = (error: unknown) => {
+  return {
+    message: error instanceof Error ? error.message : "Something went wrong!",
+    status: "warning" as const,
+  };
+};
 
 export const getAuthUser = async () => {
   const user = await currentUser();
@@ -50,10 +58,7 @@ export const createProfileAction = async (
 
     return { message: "Profile created", status: "success" as const };
   } catch (err) {
-    return {
-      message: err instanceof Error ? err.message : "Something went wrong!",
-      status: "warning" as const,
-    };
+    renderError(err);
   }
 };
 
@@ -93,5 +98,30 @@ export const updateProfileAction = async (
   prevState: any,
   formData: FormData
 ): Promise<{ message: string; status: "success" | "warning" }> => {
-  return { message: "Profile updated", status: "success" };
+  //fetching current user
+  const user = await getAuthUser();
+
+  try {
+    // validating fields of the form
+    const rawData = Object.fromEntries(formData);
+    const validatedFields = profileSchema.parse(rawData);
+
+    // updating the database
+    await db.profile.update({
+      where: {
+        clerkId: user.id,
+      },
+      data: {
+        firstName: validatedFields.firstName,
+        lastName: validatedFields.lastName,
+        userName: validatedFields.userName,
+      },
+    });
+
+    // for cache revlidtaion of the current route.
+    revalidatePath("/profile");
+    return { message: "Profile updated successfully.", status: "success" };
+  } catch (err) {
+    return renderError(err);
+  }
 };
