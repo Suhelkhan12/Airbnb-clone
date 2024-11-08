@@ -3,7 +3,7 @@
 
 import { currentUser } from "@clerk/nextjs/server";
 import db from "@/utils/db";
-import { profileSchema } from "@/utils/schema";
+import { profileSchema, validateDataWithScehma } from "@/utils/schema";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
@@ -30,7 +30,7 @@ export const createProfileAction = async (
 ) => {
   try {
     const rawData = Object.fromEntries(formData);
-    const validatedFields = profileSchema.parse(rawData);
+    const validatedFields = validateDataWithScehma(profileSchema, rawData);
 
     // fetch current user from clerk
     const user = await currentUser();
@@ -104,18 +104,15 @@ export const updateProfileAction = async (
   try {
     // validating fields of the form
     const rawData = Object.fromEntries(formData);
-    const validatedFields = profileSchema.parse(rawData);
+
+    const data = validateDataWithScehma(profileSchema, rawData);
 
     // updating the database
     await db.profile.update({
       where: {
         clerkId: user.id,
       },
-      data: {
-        firstName: validatedFields.firstName,
-        lastName: validatedFields.lastName,
-        userName: validatedFields.userName,
-      },
+      data,
     });
 
     // for cache revlidtaion of the current route.
