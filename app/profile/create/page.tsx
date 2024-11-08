@@ -3,8 +3,14 @@ import FormInput from "@/components/form/FormInput";
 import { SubmitButton } from "@/components/form/Buttons";
 import FormContainer from "@/components/form/FormContainer";
 import { createProfileAction } from "@/actions/actions";
+import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
-const page = () => {
+const page = async () => {
+  // simply redirecting the user the home page if they login and already have a profile.
+  const user = await currentUser();
+  if (user?.privateMetadata?.hasProfile) redirect("/");
+
   return (
     <section>
       <h1 className="text-2xl font-semibold mb-8 capitalize">new user</h1>

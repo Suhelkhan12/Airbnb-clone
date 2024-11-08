@@ -1,13 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
-import { clerkClient, currentUser } from "@clerk/nextjs/server";
-
+import { currentUser } from "@clerk/nextjs/server";
 import db from "@/utils/db";
-
 import { profileSchema } from "@/utils/schema";
+import { redirect } from "next/navigation";
+
+export const getAuthUser = async () => {
+  const user = await currentUser();
+
+  if (!user) throw new Error("You must be logged in to access this feature.");
+
+  if (!user.privateMetadata.hasProfile) redirect("/profile/create");
+
+  return user;
+};
 
 export const createProfileAction = async (
   prevState: any,
@@ -21,23 +28,70 @@ export const createProfileAction = async (
     const user = await currentUser();
 
     // checking if there is no user
-    if (!user) throw new Error("Something went wrong");
+    if (!user) throw new Error("Please login to create the profile.");
 
     //adding profile of the user to our db
     await db.profile.create({
       data: {
         clerkId: user.id,
         email: user.emailAddresses[0].emailAddress,
-        profileImage: user.imageUrl,
+        profileImage: user.imageUrl ?? "",
         ...validatedFields,
       },
     });
 
-    // creating meta data in clerk so that when this user logs in again they will be redirected to page other than /profile/create
+    // TODO
+    // updating meta data in clerk for the user who just created profile so that when user logs in they can be redirected to page other than /profile/create
+    // await clerkClient.users.updateUserMetadata(user.id, {
+    //   privateMetadata: {
+    //     hasProfile: true,
+    //   },
+    // });
 
-    return { message: "Profile created" };
+    return { message: "Profile created", status: "success" as const };
   } catch (err) {
-    console.log(err);
-    return { message: "Something went wrong" };
+    return {
+      message: err instanceof Error ? err.message : "Something went wrong!",
+      status: "warning" as const,
+    };
   }
+};
+
+export const fetchProfileImageAction = async () => {
+  const user = await currentUser();
+
+  if (!user) return null;
+
+  const profile = await db.profile.findUnique({
+    where: {
+      clerkId: user?.id,
+    },
+    select: {
+      profileImage: true,
+    },
+  });
+
+  return profile?.profileImage;
+};
+
+export const fetchProfileAction = async () => {
+  const user = await getAuthUser();
+
+  const profile = db.profile.findUnique({
+    where: {
+      clerkId: user.id,
+    },
+  });
+
+  // if no profile is found for the user
+  if (!profile) redirect("/profile/create");
+
+  return profile;
+};
+
+export const updateProfileAction = async (
+  prevState: any,
+  formData: FormData
+): Promise<{ message: string; status: "success" | "warning" }> => {
+  return { message: "Profile updated", status: "success" };
 };

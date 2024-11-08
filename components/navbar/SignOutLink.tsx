@@ -7,6 +7,7 @@ const SignOutLink = () => {
   const handleLogout = () => {
     toast.warning("You have been signed out!");
   };
+
   return (
     <SignOutButton redirectUrl="/">
       <button className="w-full text-left" onClick={handleLogout}>

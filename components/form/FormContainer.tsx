@@ -8,6 +8,7 @@ import { type actionType } from "@/utility/types";
 
 const initialState = {
   message: "",
+  status: "",
 };
 
 type FormContainerProps = {
@@ -20,7 +21,8 @@ const FormContainer = ({ children, action }: FormContainerProps) => {
 
   useEffect(() => {
     if (state.message) {
-      toast.success(state.message);
+      if (state.status === "success") toast.success(state.message);
+      else toast.warning(state.message);
     }
   }, [state]);
 
