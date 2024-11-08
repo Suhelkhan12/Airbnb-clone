@@ -1,16 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import console from "console";
 import FormInput from "@/components/form/FormInput";
 import { SubmitButton } from "@/components/form/Buttons";
 import FormContainer from "@/components/form/FormContainer";
-
-const createProfileAction = async (prevState: any, formData: FormData) => {
-  "use server";
-  const firstName = formData.get("firstName");
-  console.log(firstName);
-  await new Promise((res) => setTimeout(res, 2000));
-  return { message: "Profile created" };
-};
+import { createProfileAction } from "@/actions/actions";
 
 const page = () => {
   return (
@@ -33,7 +25,7 @@ const page = () => {
             />
             <FormInput
               type="text"
-              name="username"
+              name="userName"
               label="Username"
               placeholder="johndoe"
             />
