@@ -5,7 +5,7 @@ import { toast } from "sonner";
 
 const SignOutLink = () => {
   const handleLogout = () => {
-    toast.warning("You have been signed out!");
+    toast.warning("You are being signed out!");
   };
 
   return (

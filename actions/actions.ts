@@ -3,9 +3,14 @@
 
 import { currentUser } from "@clerk/nextjs/server";
 import db from "@/utils/db";
-import { profileSchema, validateDataWithScehma } from "@/utils/schema";
+import {
+  imageSchema,
+  profileSchema,
+  validateDataWithScehma,
+} from "@/utils/schema";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { uploadImage } from "@/utils/supabase";
 
 const renderError = (error: unknown) => {
   return {
@@ -58,7 +63,7 @@ export const createProfileAction = async (
 
     return { message: "Profile created", status: "success" as const };
   } catch (err) {
-    renderError(err);
+    return renderError(err);
   }
 };
 
@@ -117,7 +122,46 @@ export const updateProfileAction = async (
 
     // for cache revlidtaion of the current route.
     revalidatePath("/profile");
-    return { message: "Profile updated successfully.", status: "success" };
+    return {
+      message: "Profile updated successfully.",
+      status: "success" as const,
+    };
+  } catch (err) {
+    return renderError(err);
+  }
+};
+
+export const updateProfileImageAction = async (
+  prevState: any,
+  formData: FormData
+): Promise<{ message: string; status: "success" | "warning" }> => {
+  // fetching user
+  const user = await getAuthUser();
+
+  try {
+    //getting image from form & validating the image
+    const image = formData.get("image") as File;
+    const validatedFields = validateDataWithScehma(imageSchema, { image });
+
+    //uploading image to supabase bucket and fetching the url
+    const fullPathOfImageFromBucket = await uploadImage(validatedFields.image);
+
+    //updating our user in db
+    await db.profile.update({
+      where: {
+        clerkId: user.id,
+      },
+      data: {
+        profileImage: fullPathOfImageFromBucket,
+      },
+    });
+
+    //cache revalidation
+    revalidatePath("/profile");
+    return {
+      message: "Profile image updated successfully.",
+      status: "success",
+    };
   } catch (err) {
     return renderError(err);
   }
