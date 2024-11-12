@@ -74,3 +74,13 @@ export const categories: Category[] = [
     icon: GiWoodCabin,
   },
 ];
+
+// this will be used while fetching property data
+export type PropertyCardProps = {
+  image: string;
+  id: string;
+  name: string;
+  tagline: string;
+  country: string;
+  price: number;
+};
