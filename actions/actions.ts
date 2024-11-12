@@ -7,6 +7,7 @@ import {
   imageSchema,
   profileSchema,
   validateDataWithScehma,
+  propertySchema,
 } from "@/utils/schema";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
@@ -162,6 +163,41 @@ export const updateProfileImageAction = async (
       message: "Profile image updated successfully.",
       status: "success",
     };
+  } catch (err) {
+    return renderError(err);
+  }
+};
+
+export const createPropertyAction = async (
+  prevState: any,
+  formData: FormData
+): Promise<{
+  message: string;
+  status: "success" | "warning";
+}> => {
+  const user = await getAuthUser();
+  try {
+    const rawData = Object.fromEntries(formData);
+    const propertyImage = formData.get("image") as File;
+
+    const validatedFields = validateDataWithScehma(propertySchema, rawData);
+    //validating images separately
+    const validatedImage = validateDataWithScehma(imageSchema, {
+      image: propertyImage,
+    });
+
+    // uploading image to supabase
+    const fullImageUrl = await uploadImage(validatedImage.image);
+
+    // pushing property to db
+    await db.property.create({
+      data: {
+        ...validatedFields,
+        image: fullImageUrl,
+        profileId: user.id,
+      },
+    });
+    return { message: "Property created.", status: "success" };
   } catch (err) {
     return renderError(err);
   }

@@ -20,7 +20,7 @@ export default function RootLayout({
         <body>
           <Providers>
             <Navbar />
-            <main className="container pt-8">{children}</main>
+            <main className="container py-8">{children}</main>
           </Providers>
         </body>
       </html>

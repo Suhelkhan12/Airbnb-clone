@@ -50,7 +50,9 @@ const ImageInputContainer = (props: ImageInputContainerProps) => {
         <div className=" max-w-lg">
           <FormContainer action={action}>
             {props.children}
-            <ImageInput />
+            <div className=" mt-4 max-w-xs w-full">
+              <ImageInput />
+            </div>
             <SubmitButton size="sm" />
           </FormContainer>
         </div>
