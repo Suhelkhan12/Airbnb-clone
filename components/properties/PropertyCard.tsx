@@ -16,7 +16,7 @@ const PropertyCard = ({ property }: { property: PropertyCardProps }) => {
       <CardHeader className="p-3 hover:shadow-lg duration-300">
         <article className="group relative">
           <Link href={`/properties/${propertyId}`}>
-            <div className="relative w-full overflow-hidden rounded-md h-[15rem]">
+            <div className="relative w-full overflow-hidden rounded-md h-[15rem] mb-2">
               <Image
                 src={image}
                 alt={name}
@@ -29,7 +29,7 @@ const PropertyCard = ({ property }: { property: PropertyCardProps }) => {
               <h3 className="text-sm font-semibold mt-1">
                 {name.substring(0, 30)}
               </h3>
-              {/* property rating */}
+              <PropertyRating propertyId={propertyId} inPage={false} />
             </div>
             <p className="text-sm mt-1 text-muted-foreground ">
               {tagline.substring(0, 40)}
@@ -39,11 +39,11 @@ const PropertyCard = ({ property }: { property: PropertyCardProps }) => {
                 <span className="font-semibold">{formatCurrency(price)} </span>
                 night
               </p>
-              {/* country and flag */}
+              <CountryFlagAndName countryCode={country} />
             </div>
           </Link>
-          <div className="absolute top-5 right-5 z-5">
-            {/* favorite toggle button */}
+          <div className="absolute top-3 right-3 z-5">
+            <FavoriteToggleButton propertyId={propertyId} />
           </div>
         </article>
       </CardHeader>
