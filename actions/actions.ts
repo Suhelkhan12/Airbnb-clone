@@ -313,3 +313,14 @@ export const fetchFavorites = async () => {
   // returing the array of properties objects
   return properties.map((prop) => prop.property);
 };
+
+export const fetchPropertyDetails = async (id: string) => {
+  return db.property.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      Profile: true,
+    },
+  });
+};

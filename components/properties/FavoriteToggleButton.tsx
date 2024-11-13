@@ -10,6 +10,7 @@ const FavoriteToggleButton = async ({ propertyId }: { propertyId: string }) => {
   }
 
   const favoriteId = await fetchFavoriteId({ propertyId });
+
   return <FavoriteToggleForm favoriteId={favoriteId} propertyId={propertyId} />;
 };
 
