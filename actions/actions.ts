@@ -288,3 +288,28 @@ export const toggleFavoriteAction = async (prevState: {
     return renderError(err);
   }
 };
+
+export const fetchFavorites = async () => {
+  const user = await getAuthUser();
+  const properties = await db.favorite.findMany({
+    where: {
+      // this is where this profile id is coming in handy because we don't wanat to display all the favorites from our db but user specific favorites only
+      profileId: user.id,
+    },
+    select: {
+      property: {
+        select: {
+          id: true,
+          name: true,
+          tagline: true,
+          country: true,
+          image: true,
+          price: true,
+        },
+      },
+    },
+  });
+
+  // returing the array of properties objects
+  return properties.map((prop) => prop.property);
+};

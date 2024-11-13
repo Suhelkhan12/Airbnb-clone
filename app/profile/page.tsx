@@ -13,7 +13,7 @@ const page = async () => {
 
   return (
     <section>
-      <h1 className="text-2xl font-semibold mb-8 capitalize">new user</h1>
+      <h1 className="text-2xl font-semibold mb-8 capitalize">Your profile</h1>
       <div className="border p-6 rounded-md ">
         <ImageInputContainer
           action={updateProfileImageAction}
