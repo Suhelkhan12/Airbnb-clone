@@ -8,7 +8,7 @@ import { Button } from "../ui/button";
 import { LuShare2 } from "react-icons/lu";
 
 import { WhatsappShareButton, WhatsappIcon } from "react-share";
-import { Link2Icon } from "lucide-react";
+import { FaLink } from "react-icons/fa6";
 import { toast } from "sonner";
 
 const ShareButton = ({
@@ -48,7 +48,7 @@ const ShareButton = ({
           <WhatsappIcon size={26} round />
         </WhatsappShareButton>
         <Button size={"icon"} variant={"link"} onClick={handleClipboardCopy}>
-          <Link2Icon />
+          <FaLink />
         </Button>
       </PopoverContent>
     </Popover>
