@@ -21,6 +21,7 @@ const PropertyCard = ({ property }: { property: PropertyCardProps }) => {
                 src={image}
                 alt={name}
                 fill
+                priority
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw"
                 className="rounded-md  transform group-hover:scale-105 transition-transform duration-500"
               />
