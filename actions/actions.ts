@@ -217,6 +217,7 @@ export const fetchProperties = async ({
       OR: [
         { name: { contains: search, mode: "insensitive" } },
         { tagline: { contains: search, mode: "insensitive" } },
+        { description: { contains: search, mode: "insensitive" } },
       ],
     },
     select: {
@@ -232,4 +233,58 @@ export const fetchProperties = async ({
     },
   });
   return properties;
+};
+
+export const fetchFavoriteId = async ({
+  propertyId,
+}: {
+  propertyId: string;
+}) => {
+  const user = await getAuthUser();
+  const favorite = await db.favorite.findFirst({
+    where: {
+      propertyId,
+      profileId: user.id,
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  return favorite?.id || null;
+};
+
+export const toggleFavoriteAction = async (prevState: {
+  propertyId: string;
+  favoriteId: string | null;
+  pathname: string;
+}) => {
+  const user = await getAuthUser();
+
+  try {
+    const { propertyId, pathname, favoriteId } = prevState;
+
+    // if favorite id for property already exists then we will remove it from db otherwise we will add the property id to favorites
+    if (favoriteId) {
+      await db.favorite.delete({
+        where: {
+          id: favoriteId,
+        },
+      });
+    } else {
+      await db.favorite.create({
+        data: {
+          propertyId,
+          profileId: user.id,
+        },
+      });
+    }
+    revalidatePath(pathname);
+    return {
+      message: favoriteId ? "Removed from favorites." : "Added to favorites.",
+      status: favoriteId ? ("warning" as const) : ("success" as const),
+    };
+  } catch (err) {
+    return renderError(err);
+  }
 };

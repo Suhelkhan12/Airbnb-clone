@@ -13,7 +13,7 @@ const PropertyCard = ({ property }: { property: PropertyCardProps }) => {
 
   return (
     <Card>
-      <CardHeader className="p-3 hover:shadow-lg duration-300">
+      <CardHeader className="p-3 hover:shadow-lg dark:shadow-zinc-900 duration-300">
         <article className="group relative">
           <Link href={`/properties/${propertyId}`}>
             <div className="relative w-full overflow-hidden rounded-md h-[15rem] mb-2">

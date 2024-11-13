@@ -10,6 +10,10 @@ const PropertiesContainer = async ({
   search?: string;
   category?: string;
 }) => {
+  console.log({
+    search,
+    category,
+  });
   const properties: PropertyCardProps[] = await fetchProperties({
     search,
     category,
