@@ -11,6 +11,7 @@ import UserInfo from "@/components/properties/UserInfo";
 import { Separator } from "@/components/ui/separator";
 import Description from "@/components/properties/Description";
 import Amenities from "@/components/properties/Amenities";
+import SubmitReview from "@/components/reviews/SubmitReview";
 
 const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const id = (await params).id;
@@ -55,6 +56,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
           <CalendarComponent />
         </div>
       </div>
+      <SubmitReview propertyId={property.id} />
     </section>
   );
 };

@@ -324,3 +324,19 @@ export const fetchPropertyDetails = async (id: string) => {
     },
   });
 };
+
+export const createReviewAction = async () => {
+  return { message: "Review created.", status: "success" as const };
+};
+
+export const fetchPropertyReviewsAction = async () => {
+  return { message: "Review created.", status: "success" };
+};
+
+export const fetchPropertyReviewsByUserAction = async () => {
+  return { message: "Review created.", status: "success" };
+};
+
+export const deleteReviewAction = async () => {
+  return { message: "Review created.", status: "success" };
+};
