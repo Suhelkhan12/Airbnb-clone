@@ -1,11 +1,16 @@
 import { fetchPropertyDetails } from "@/actions/actions";
-import CalendarComponent from "@/components/properties/bookings/Calendar";
+import CalendarComponent from "@/components/properties/Calendar";
 import BreadCrumbs from "@/components/properties/BreadCrumbs";
 import FavoriteToggleButton from "@/components/properties/FavoriteToggleButton";
 import ImageContainer from "@/components/properties/ImageContainer";
 import PropertyRating from "@/components/properties/PropertyRating";
 import ShareButton from "@/components/properties/ShareButton";
 import { redirect } from "next/navigation";
+import PropertyDetails from "@/components/properties/PropertyDetails";
+import UserInfo from "@/components/properties/UserInfo";
+import { Separator } from "@/components/ui/separator";
+import Description from "@/components/properties/Description";
+import Amenities from "@/components/properties/Amenities";
 
 const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const id = (await params).id;
@@ -17,6 +22,9 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   const { baths, bedrooms, beds, guests } = property;
   const details = { baths, bedrooms, guests, beds };
+
+  const { profileImage, firstName: name } = property.Profile;
+  const profile = { profileImage, name };
 
   return (
     <section>
@@ -35,6 +43,12 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
             <h2 className="text-xl font-semibold">{property.name}</h2>
             <PropertyRating inPage={true} propertyId={property.id} />
           </div>
+          <PropertyDetails details={details} />
+          <UserInfo profile={profile} />
+          <Separator className="mt-4" />
+          <Description description={property.description} />
+          <Amenities amenities={property.amenities} />
+          {/* <DynamicMapSkippingSSR countryCode={property.country} /> */}
         </div>
         <div className=" lg:col-span-4 flex flex-col items-center">
           {/* calendar */}

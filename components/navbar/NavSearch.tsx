@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 import { Input } from "../ui/input";
@@ -29,19 +29,22 @@ function NavSearch() {
     if (!searchParams.get("search")) {
       setSearch("");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams.get("search")]);
 
   return (
-    <Input
-      type="search"
-      placeholder="Search for property..."
-      className="w-full sm:max-w-xs dark:bg-muted "
-      value={search}
-      onChange={(e) => {
-        setSearch(e.target.value);
-        handleSearch(e.target.value);
-      }}
-    />
+    <Suspense>
+      <Input
+        type="search"
+        placeholder="Search for property..."
+        className="w-full sm:max-w-xs dark:bg-muted "
+        value={search}
+        onChange={(e) => {
+          setSearch(e.target.value);
+          handleSearch(e.target.value);
+        }}
+      />
+    </Suspense>
   );
 }
 export default NavSearch;
