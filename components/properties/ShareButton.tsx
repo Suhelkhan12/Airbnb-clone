@@ -8,8 +8,8 @@ import { Button } from "../ui/button";
 import { LuShare2 } from "react-icons/lu";
 
 import { WhatsappShareButton, WhatsappIcon } from "react-share";
-import { FaLink } from "react-icons/fa6";
-import { toast } from "sonner";
+// import { FaLink } from "react-icons/fa6";
+// import { toast } from "sonner";
 
 const ShareButton = ({
   propertyId,
@@ -21,15 +21,15 @@ const ShareButton = ({
   const url = process.env.NEXT_PUBLIC_WEBSITE_URL;
   const shareUrl = `${url}/properties/${propertyId}`;
 
-  const handleClipboardCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(shareUrl);
-      toast.success("Copied to clipboard.");
-    } catch (err) {
-      console.log(err);
-      throw new Error("Clipboard funtion not working.");
-    }
-  };
+  // const handleClipboardCopy = async () => {
+  //   try {
+  //     await navigator.clipboard.writeText(shareUrl);
+  //     toast.success("Copied to clipboard.");
+  //   } catch (err) {
+  //     console.log(err);
+  //     throw new Error("Clipboard funtion not working.");
+  //   }
+  // };
 
   return (
     <Popover>
@@ -47,9 +47,9 @@ const ShareButton = ({
         <WhatsappShareButton url={shareUrl} title={name}>
           <WhatsappIcon size={26} round />
         </WhatsappShareButton>
-        <Button size={"icon"} variant={"link"} onClick={handleClipboardCopy}>
+        {/* <Button size={"icon"} variant={"link"} onClick={handleClipboardCopy}>
           <FaLink />
-        </Button>
+        </Button> */}
       </PopoverContent>
     </Popover>
   );
