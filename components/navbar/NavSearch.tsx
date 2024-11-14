@@ -10,6 +10,8 @@ function NavSearch() {
   const pathname = usePathname();
   const { replace } = useRouter();
 
+  const isHidden = pathname === "/favorites";
+
   const [search, setSearch] = useState<string>(
     searchParams.get("search")?.toString() || ""
   );
@@ -36,7 +38,9 @@ function NavSearch() {
     <Input
       type="search"
       placeholder="Search for property..."
-      className="w-full sm:max-w-xs dark:bg-muted "
+      className={`w-full sm:max-w-xs dark:bg-muted ${
+        isHidden ? "hidden" : ""
+      } `}
       value={search}
       onChange={(e) => {
         setSearch(e.target.value);
