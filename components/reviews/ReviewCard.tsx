@@ -22,7 +22,7 @@ const ReviewCard = (props: ReviewCardProps) => {
   } = props.reviewInfo;
 
   return (
-    <Card>
+    <Card className="relative">
       <CardHeader>
         <div className="flex items-center">
           <img
@@ -42,7 +42,7 @@ const ReviewCard = (props: ReviewCardProps) => {
         <Comment userComment={userComment} />
       </CardContent>
       {/* Delte button later */}
-      <div className=" absolute top-3 right-3">{props.children}</div>
+      <div className=" absolute top-4 right-4">{props.children}</div>
     </Card>
   );
 };

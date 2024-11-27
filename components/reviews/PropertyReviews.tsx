@@ -1,9 +1,9 @@
-import { fetchPropertyReviewsByUserAction } from "@/actions/actions";
+import { fetchPropertyReviewsAction } from "@/actions/actions";
 import Title from "../properties/Title";
 import ReviewCard from "./ReviewCard";
 
 const PropertyReviews = async ({ propertyId }: { propertyId: string }) => {
-  const reviews = await fetchPropertyReviewsByUserAction(propertyId);
+  const reviews = await fetchPropertyReviewsAction(propertyId);
   if (reviews.length === 0) return null;
   return (
     <div className="mt-8">

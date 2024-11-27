@@ -7,7 +7,7 @@ const Comment = ({ userComment }: { userComment: string }) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const commentToShow =
     !isExpanded && userComment.length > 100
-      ? userComment.slice(0, 100)
+      ? userComment.slice(0, 100) + "..."
       : userComment;
 
   const handleClick = () => setIsExpanded((p) => !p);
