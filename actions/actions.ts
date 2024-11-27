@@ -8,6 +8,7 @@ import {
   profileSchema,
   validateDataWithScehma,
   propertySchema,
+  reviewSchema,
 } from "@/utils/schema";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
@@ -325,8 +326,28 @@ export const fetchPropertyDetails = async (id: string) => {
   });
 };
 
-export const createReviewAction = async () => {
-  return { message: "Review created.", status: "success" as const };
+export const createReviewAction = async (
+  prevState: any,
+  formData: FormData
+) => {
+  const user = await getAuthUser();
+  try {
+    const rowData = Object.fromEntries(formData);
+    const validatedFields = validateDataWithScehma(reviewSchema, rowData);
+    await db.review.create({
+      data: {
+        profileId: user.id,
+        ...validatedFields,
+      },
+    });
+    revalidatePath(`/properties/${validatedFields.propertyId}`);
+    return {
+      message: "Review submitted successfully.",
+      status: "success" as const,
+    };
+  } catch (err) {
+    return renderError(err);
+  }
 };
 
 export const fetchPropertyReviewsAction = async () => {

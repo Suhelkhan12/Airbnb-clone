@@ -15,16 +15,14 @@ const RatingInput = ({
   labelText?: string;
 }) => {
   // creating an array which contains all the numbers among which user can give rating
-  const ratingNumbers = Array.from({ length: 5 }, (_, i) =>
-    (i + 1).toString()
-  ).reverse();
+  const ratingNumbers = Array.from({ length: 5 }, (_, i) => (i + 1).toString());
 
   return (
     <div className="mb-2 max-w-xs flex flex-col gap-2">
       <Label htmlFor={name} className=" capitalize text-lg">
         {labelText || name}
       </Label>
-      <Select defaultValue={ratingNumbers[0]} name={name} required>
+      <Select defaultValue={ratingNumbers[0]} name={name}>
         <SelectTrigger id={name}>
           <SelectValue />
         </SelectTrigger>

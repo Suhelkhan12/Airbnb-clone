@@ -24,7 +24,7 @@ const SubmitReview = ({ propertyId }: { propertyId: string }) => {
         <Card className="p-4 mt-6">
           <FormContainer action={createReviewAction}>
             {/* so that we can relate review with a property */}
-            <input type="hidden" name={propertyId} value={propertyId} />
+            <input type="hidden" name="propertyId" value={propertyId} />
             <div className=" flex flex-col gap-4">
               <RatingInput name="rating" />
               <DescriptionInput

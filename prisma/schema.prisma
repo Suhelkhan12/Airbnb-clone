@@ -65,6 +65,7 @@ model Favorite {
 
 model Review {
   id        String   @id @default(uuid())
+  rating    Int
   comment   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

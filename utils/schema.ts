@@ -6,7 +6,7 @@ export const validateDataWithScehma = <T>(
   data: unknown
 ): T => {
   const result = schema.safeParse(data);
-
+  console.log(result);
   if (!result.success) {
     const errors = result.error.errors.map((err) => err.message);
     throw new Error(errors.join("\n"));
@@ -103,4 +103,16 @@ export const propertySchema = z.object({
     message: "bahts amount must be a positive number.",
   }),
   amenities: z.string(),
+});
+
+// for review
+export const reviewSchema = z.object({
+  propertyId: z.string(),
+  rating: z.coerce.number().int().min(1).max(5),
+  comment: z
+    .string()
+    .min(10, {
+      message: "Should contain atleast 10 characters",
+    })
+    .max(1000),
 });
