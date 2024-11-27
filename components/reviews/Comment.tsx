@@ -1,7 +1,7 @@
 import React from "react";
 
-const Comment = () => {
-  return <div>Comment</div>;
+const Comment = ({ userComment }: { userComment: string }) => {
+  return <p className="text-sm">{userComment}</p>;
 };
 
 export default Comment;
