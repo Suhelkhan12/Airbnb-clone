@@ -14,10 +14,6 @@ const PropertyRating = async ({
   const countText = count > 1 ? "reviews" : "review";
   const countValue = `(${count}) ${inPage ? countText : ""}`;
 
-  console.log({
-    rating,
-    countValue,
-  });
   return (
     <span className={className}>
       <FaStar className="w-3 h-3" />

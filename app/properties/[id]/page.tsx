@@ -1,6 +1,5 @@
 import { fetchPropertyDetails, findExistingReview } from "@/actions/actions";
 import { auth } from "@clerk/nextjs/server";
-import CalendarComponent from "@/components/properties/Calendar";
 import BreadCrumbs from "@/components/properties/BreadCrumbs";
 import FavoriteToggleButton from "@/components/properties/FavoriteToggleButton";
 import ImageContainer from "@/components/properties/ImageContainer";
@@ -14,6 +13,7 @@ import Description from "@/components/properties/Description";
 import Amenities from "@/components/properties/Amenities";
 import SubmitReview from "@/components/reviews/SubmitReview";
 import PropertyReviews from "@/components/reviews/PropertyReviews";
+import DynamicBookingWrapper from "@/components/booking/DynamicBookingWrapper";
 
 const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const id = (await params).id;
@@ -63,7 +63,11 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
         </div>
         <div className=" lg:col-span-4 flex flex-col items-center">
           {/* calendar */}
-          <CalendarComponent />
+          <DynamicBookingWrapper
+            propertyId={property.id}
+            price={property.price}
+            bookings={property.bookings}
+          />
         </div>
       </div>
 

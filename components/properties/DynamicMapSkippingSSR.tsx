@@ -13,11 +13,7 @@ const DynamicMapSkippingSSR = ({ countryCode }: { countryCode: string }) => {
     []
   );
 
-  return (
-    <>
-      <DynamicMap countryCode={countryCode} />
-    </>
-  );
+  return <DynamicMap countryCode={countryCode} />;
 };
 
 export default DynamicMapSkippingSSR;

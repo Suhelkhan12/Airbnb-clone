@@ -322,6 +322,12 @@ export const fetchPropertyDetails = async (id: string) => {
     },
     include: {
       Profile: true,
+      bookings: {
+        select: {
+          checkIn: true,
+          checkOut: true,
+        },
+      },
     },
   });
 };
@@ -429,11 +435,14 @@ export const fetchPropertyRating = async (propertyId: string) => {
   };
 };
 
-export const findExistingReview = async (userId: string, propertyId: string) => {
+export const findExistingReview = async (
+  userId: string,
+  propertyId: string
+) => {
   return db.review.findFirst({
     where: {
       profileId: userId,
-      propertyId: propertyId
-    }
-  })
-}
+      propertyId: propertyId,
+    },
+  });
+};
