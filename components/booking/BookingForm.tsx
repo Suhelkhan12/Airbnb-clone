@@ -13,7 +13,7 @@ const BookingForm = () => {
     calculateTotals({ checkIn, checkOut, price });
 
   return (
-    <Card>
+    <Card className="mb-4">
       <CardHeader>
         <CardTitle>Order summary</CardTitle>
       </CardHeader>
