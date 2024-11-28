@@ -1,7 +1,21 @@
-import React from "react";
+"use client";
+
+import { usePropertyStore } from "@/utils/store";
+import BookingForm from "./BookingForm";
+import ConfirmBooking from "./ConfirmBooking";
 
 const BookingContainer = () => {
-  return <div>BookingContainer</div>;
+  const range = usePropertyStore((state) => state.range);
+
+  if (!range || !range.from || !range.to) return null;
+  if (range.to.getTime() === range.from.getTime()) return null;
+
+  return (
+    <div className="w-full">
+      <BookingForm />
+      <ConfirmBooking />
+    </div>
+  );
 };
 
 export default BookingContainer;
