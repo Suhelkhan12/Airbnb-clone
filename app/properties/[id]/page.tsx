@@ -1,4 +1,5 @@
-import { fetchPropertyDetails } from "@/actions/actions";
+import { fetchPropertyDetails, findExistingReview } from "@/actions/actions";
+import { auth } from "@clerk/nextjs/server";
 import CalendarComponent from "@/components/properties/Calendar";
 import BreadCrumbs from "@/components/properties/BreadCrumbs";
 import FavoriteToggleButton from "@/components/properties/FavoriteToggleButton";
@@ -27,6 +28,14 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   const { profileImage, firstName: name } = property.Profile;
   const profile = { profileImage, name };
+
+  // to maintain a relation between user and profile
+  const { userId } = await auth();
+  const isNotOwner = property.Profile.clerkId !== userId;
+
+  // if user is logged in and he/she is not the owner of property then we fetch the reviews assosiated with user
+  const reviewDoesNotExist =
+    userId && isNotOwner && !(await findExistingReview(userId, property.id));
 
   return (
     <section>
@@ -57,7 +66,8 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
           <CalendarComponent />
         </div>
       </div>
-      <SubmitReview propertyId={property.id} />
+
+      {reviewDoesNotExist && <SubmitReview propertyId={property.id} />}
       <PropertyReviews propertyId={property.id} />
     </section>
   );

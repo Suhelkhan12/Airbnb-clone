@@ -17,7 +17,7 @@ const page = async () => {
       <h1 className="text-2xl font-semibold mb-8 capitalize">
         Properties you have reviewed
       </h1>
-      <div className="grid md:grid-cols-3">
+      <div className="grid md:grid-cols-3 gap-8">
         {reviews.map((review) => {
           const { comment, rating } = review;
           const { image: profileImage, name: firstName } = review.property;
