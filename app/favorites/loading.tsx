@@ -3,5 +3,9 @@
 import { LoadingCards } from "@/components/properties/LoadingCards";
 
 export default function loading() {
-  return <LoadingCards />;
+  return (
+    <>
+      <LoadingCards />
+    </>
+  );
 }

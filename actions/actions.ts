@@ -475,7 +475,7 @@ export const createBooking = async (prevState: {
   });
 
   try {
-    const booking = await db.booking.create({
+    await db.booking.create({
       data: {
         orderTotal,
         totalNights,
@@ -489,4 +489,45 @@ export const createBooking = async (prevState: {
     return renderError(err);
   }
   redirect("/bookings");
+};
+
+export const fetchBookings = async () => {
+  const user = await getAuthUser();
+  const bookings = await db.booking.findMany({
+    where: {
+      profileId: user.id,
+    },
+    include: {
+      property: {
+        select: {
+          id: true,
+          name: true,
+          country: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return bookings;
+};
+
+export const deleteBookings = async (prevState: { id: string }) => {
+  const { id } = prevState;
+  const user = await getAuthUser();
+  try {
+    await db.booking.delete({
+      where: {
+        id,
+        profileId: user.id,
+      },
+    });
+
+    return { message: "Booking deleted.", status: "success" as const };
+  } catch (err) {
+    return renderError(err);
+  } finally {
+    revalidatePath("/bookings");
+  }
 };
