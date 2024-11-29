@@ -1,21 +1,20 @@
 "use client";
 import { Calendar } from "../ui/calendar";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
 import { DateRange } from "react-day-picker";
 import { usePropertyStore } from "@/utils/store";
 
-import {
-  generateDisabledDates,
-  generateDateRange,
-  defaultSelected,
-  generateBlockedPeriods,
-} from "@/utils/calendar";
+import { defaultSelected, generateBlockedPeriods } from "@/utils/calendar";
 
 const BookingCalendar = () => {
-  const currenDate = new Date();
+  const currentDate = new Date();
   const [range, setRange] = useState<DateRange | undefined>(defaultSelected);
 
+  // getting the bookings if there are some
+  const bookings = usePropertyStore((state) => state.bookings);
+
+  const blockedDates = generateBlockedPeriods({ bookings, today: currentDate });
+  console.log(blockedDates);
   // updating the range in our store based on selected range
   useEffect(() => {
     usePropertyStore.setState({
@@ -26,9 +25,10 @@ const BookingCalendar = () => {
   return (
     <Calendar
       mode={"range"}
-      defaultMonth={currenDate}
+      defaultMonth={currentDate}
       selected={range}
       onSelect={setRange}
+      disabled={blockedDates}
       className="mb-4"
     />
   );

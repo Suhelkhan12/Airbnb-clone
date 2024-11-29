@@ -486,7 +486,6 @@ export const createBooking = async (prevState: {
       },
     });
   } catch (err) {
-    console.log(err);
     return renderError(err);
   }
   redirect("/bookings");
