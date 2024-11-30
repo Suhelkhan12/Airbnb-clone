@@ -20,7 +20,8 @@ const DescriptionInput = ({
       <Textarea
         id={name}
         name={name}
-        placeholder={defaultValue || "Elaborate about your property..."}
+        defaultValue={defaultValue}
+        placeholder={"Elaborate about your property..."}
         rows={5}
         required
         className=" leading-loose resize-none text-sm"

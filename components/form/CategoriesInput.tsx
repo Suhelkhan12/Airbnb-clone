@@ -10,13 +10,17 @@ import {
 
 const name = "category";
 
-const CategoriesInput = () => {
+const CategoriesInput = ({ defaultValue }: { defaultValue?: string }) => {
   return (
     <div className="mb-2 flex flex-col gap-2">
       <Label htmlFor={name} className=" capitalize">
         categories
       </Label>
-      <Select defaultValue={categories[0].label} name={name} required>
+      <Select
+        defaultValue={defaultValue || categories[0].label}
+        name={name}
+        required
+      >
         <SelectTrigger id={name}>
           <SelectValue />
         </SelectTrigger>
