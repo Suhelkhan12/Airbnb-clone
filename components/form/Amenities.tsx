@@ -11,8 +11,15 @@ type AmenitiesProps = {
 
 // if this default value is provided then that will be shown other wise our custom added values will be shown
 const Amenities = ({ defaultValue }: AmenitiesProps) => {
+  const amenitiesWithIcons = defaultValue?.map((amenity) => {
+    return {
+      name: amenity.name,
+      selected: amenity.selected,
+      icon: amenities.find((am) => am.name === amenity.name)!.icon,
+    };
+  });
   const [selectedAmenities, setSelectedAmenities] = useState<Amenity[]>(
-    defaultValue || amenities
+    amenitiesWithIcons || amenities
   );
 
   const handleChange = (amenity: Amenity) => {

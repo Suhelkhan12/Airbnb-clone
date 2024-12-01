@@ -605,10 +605,57 @@ export const fetchRentalDetails = async (propertyId: string) => {
   });
 };
 
-export const updateRentalAction = async () => {
-  return { message: "Rental updated", status: "success" as const };
+export const updateRentalAction = async (
+  prevState: any,
+  formData: FormData
+): Promise<{
+  message: string;
+  status: "success" | "warning";
+}> => {
+  const user = await getAuthUser();
+  const propertyId = formData.get("id") as string;
+  try {
+    const rowData = Object.fromEntries(formData);
+    const validatedFields = validateDataWithScehma(propertySchema, rowData);
+    await db.property.update({
+      where: {
+        id: propertyId,
+        profileId: user.id,
+      },
+      data: {
+        ...validatedFields,
+      },
+    });
+    revalidatePath(`/rentals/${propertyId}`);
+    return { message: "Rental details updated.", status: "success" as const };
+  } catch (err) {
+    return renderError(err);
+  }
 };
 
-export const updateRentalImage = async () => {
-  return { message: "Rental image updated", status: "success" as const };
+export const updateRentalImage = async (
+  prevState: any,
+  formData: FormData
+): Promise<{ message: string; status: "success" | "warning" }> => {
+  const user = await getAuthUser();
+  const propertyId = formData.get("id") as string;
+
+  try {
+    const image = formData.get("image") as File;
+    const validatedFields = validateDataWithScehma(imageSchema, { image });
+    const fullPath = await uploadImage(validatedFields.image);
+    await db.property.update({
+      where: {
+        id: propertyId,
+        profileId: user.id,
+      },
+      data: {
+        image: fullPath,
+      },
+    });
+    revalidatePath(`/rentals/${propertyId}`);
+    return { message: "Rental image updated.", status: "success" as const };
+  } catch (err) {
+    return renderError(err);
+  }
 };

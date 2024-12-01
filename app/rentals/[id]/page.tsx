@@ -24,7 +24,6 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   // since we are storing amenities object as a string in our db so parsing that string back to an object
   const parsedAmenities: Amenity[] = JSON.parse(property.amenities);
-  console.log(parsedAmenities);
   return (
     <section>
       <h1 className="text-2xl font-semibold mb-8 capitalize">
@@ -68,15 +67,18 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
             <div className="flex flex-col mt-6 ">
               <h2 className=" text-base font-medium">Accomodation details</h2>
               <div className="flex flex-col gap-6 mt-2">
-                <CounterInput detail="guests" />
-                <CounterInput detail="baths" />
-                <CounterInput detail="bedrooms" />
-                <CounterInput detail="beds" />
+                <CounterInput detail="guests" defaultValue={property.guests} />
+                <CounterInput detail="baths" defaultValue={property.baths} />
+                <CounterInput
+                  detail="bedrooms"
+                  defaultValue={property.bedrooms}
+                />
+                <CounterInput detail="beds" defaultValue={property.beds} />
               </div>
             </div>
             <div className="flex flex-col gap-4 mt-6">
               <h2 className=" text-base font-medium">Amenities details</h2>
-              <Amenities />
+              <Amenities defaultValue={parsedAmenities} />
             </div>
             <SubmitButton text="create rental" className="mt-6" />
           </FormContainer>

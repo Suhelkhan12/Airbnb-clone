@@ -42,8 +42,9 @@ const ImageInputContainer = (props: ImageInputContainerProps) => {
         variant={"outline"}
         size={"sm"}
         onClick={() => setIsUpdateformVisible((p) => !p)}
+        className=" capitalize"
       >
-        {text}
+        {isUpdateformVisible ? "hide form" : text}
       </Button>
 
       {isUpdateformVisible && (
