@@ -14,6 +14,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { uploadImage } from "@/utils/supabase";
 import { calculateTotals } from "@/utils/calculatetotals";
+import { formatDate } from "@/utils/format";
 
 const renderError = (error: unknown) => {
   return {
@@ -29,6 +30,12 @@ export const getAuthUser = async () => {
 
   if (!user.privateMetadata.hasProfile) redirect("/profile/create");
 
+  return user;
+};
+
+export const getAdminUser = async () => {
+  const user = await getAuthUser();
+  if (user.id !== process.env.ADMIN_USER_ID) redirect("/");
   return user;
 };
 
@@ -683,4 +690,49 @@ export const fetchReservations = async () => {
     },
   });
   return reservations;
+};
+
+export const fetchStatistics = async () => {
+  await getAdminUser();
+  const usersCount = await db.profile.count();
+  const propertyCount = await db.property.count();
+  const bookingCount = await db.booking.count();
+
+  return {
+    usersCount,
+    propertyCount,
+    bookingCount,
+  };
+};
+
+export const fetchChartsData = async () => {
+  await getAdminUser();
+  const date = new Date();
+  date.setMonth(date.getMonth() - 6);
+  const sixMonthsAgoDate = date;
+
+  const bookings = await db.booking.findMany({
+    where: {
+      createdAt: {
+        gte: sixMonthsAgoDate,
+      },
+    },
+    orderBy: {
+      createdAt: "asc",
+    },
+  });
+
+  const bookingsPerMonth = bookings.reduce((total, current) => {
+    const date = formatDate(current.createdAt, true);
+    const existingEntry = total.find((en) => en.date === date);
+
+    if (existingEntry) {
+      existingEntry.count += 1;
+    } else {
+      total.push({ date, count: 1 });
+    }
+
+    return total;
+  }, [] as Array<{ date: string; count: number }>);
+  return bookingsPerMonth;
 };
