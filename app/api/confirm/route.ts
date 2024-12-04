@@ -1,7 +1,6 @@
 import Stripe from "stripe";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
-import { redirect } from "next/navigation";
-
+import { NextResponse } from "next/server";
 import { type NextRequest } from "next/server";
 import db from "@/utils/db";
 
@@ -25,7 +24,7 @@ export const GET = async (req: NextRequest) => {
         paymentStatus: true,
       },
     });
-    redirect("/bookings");
+     return NextResponse.redirect(new URL("/bookings", req.url));
   } catch (err) {
     console.log(err);
     return Response.json(null, {
